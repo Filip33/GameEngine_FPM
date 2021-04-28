@@ -19,6 +19,12 @@ void Engine::Start(sf::RenderWindow* window)
 	}
 }
 
+void Engine::AddSystem(ECS::EntitySystem* newSys)
+{
+	world->registerSystem(newSys);
+	world->enableSystem(newSys);
+}
+
 Engine::Engine() = default;
 
 void Engine::Update()
@@ -32,6 +38,8 @@ void Engine::Update()
 			window->close();
 		}
 	}
+
+	world->tick(10.0f);
 }
 
 Engine::~Engine() = default;

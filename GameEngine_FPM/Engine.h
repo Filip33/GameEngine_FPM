@@ -1,15 +1,20 @@
 #pragma once
 #include <iostream>
 #include <sfml/Graphics.hpp>
+#include "ECS.h"
+#include "Components.h"
+#include "Systems/RenderingSystem.h"
 
 class Engine
 {
 public:
 	sf::RenderWindow* window;
+	ECS::World* world;
 
 	static Engine& GetInstance();
 
 	void Start(sf::RenderWindow* window);
+	void AddSystem(ECS::EntitySystem* newSys);
 
 private:
 	bool bQuit;
