@@ -30,5 +30,56 @@ public:
 		this->texture = filepath;
 	}
 };
+
+struct Animator
+{
+	ECS_DECLARE_TYPE;
+public:
+	int spriteWidth, spriteHeight;
+	int currentColumn, currentRow;
+	int totalColumns, totalRows;
+	float currentTime, nextFrameTime;
+	bool bFacingRight;
+
+	Animator(int newWidth, int newHeight, float timeBetweenFrames, int columns, int rows)
+	{
+		spriteWidth = newWidth;
+		spriteHeight = newHeight;
+
+		currentColumn = 0;
+		currentRow = 0;
+
+		totalColumns = columns;
+		totalRows = rows;
+
+		nextFrameTime = timeBetweenFrames;
+		currentTime = 0;
+
+		bFacingRight = true;
+	}
+};
+
+struct InputController
+{
+	ECS_DECLARE_TYPE;
+public:
+	bool bInputActive;
+	bool wKey;
+	bool sKey;
+	bool aKey;
+	bool dKey;
+
+	InputController()
+	{
+		bInputActive = true;
+		wKey = false;
+		sKey = false;
+		aKey = false;
+		dKey = false;
+	}
+}
+
 ECS_DEFINE_TYPE(Transform);
 ECS_DEFINE_TYPE(Sprite2D);
+ECS_DEFINE_TYPE(Animator);
+ECS_DEFINE_TYPE(InputController);
