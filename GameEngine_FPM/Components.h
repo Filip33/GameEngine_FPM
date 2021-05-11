@@ -5,14 +5,41 @@ struct Transform
 {
 	ECS_DECLARE_TYPE;
 public:
-	float xPos;
-	float yPos;
+	float xPos, yPos;
 	float rotation;
+	float xSpeed, ySpeed;
+	float xSpeedMod, ySpeedMod;
+	bool bColliding;
 
-	Transform(float newX, float newY)
-		:xPos(newX), yPos(newY)
+	Transform(float newX, float newY, float newXSpeed = 0.0f, float newYSpeed = 0.0f)
+		:xPos(newX), yPos(newY), xSpeedMod(newXSpeed), ySpeedMod(newYSpeed)
 	{
 		this->rotation = 0.0f;
+		this->xSpeed = 0.0f;
+		this->ySpeed = 0.0f;
+		this->bColliding = false;
+	}
+
+	void UpdateSpeed(float x, float y)
+	{
+		this->xSpeed = x;
+		this->ySpeed = y;
+	}
+
+	void Move()	
+	{
+		if (bColliding == false)
+		{
+			// Halve the speed when moving diagonally
+			if (xSpeed != 0 && ySpeed != 0)
+			{
+				xSpeed /= 2;
+				ySpeed /= 2;
+			}
+
+			xPos += xSpeed;
+			yPos += ySpeed;
+		}
 	}
 };
 
