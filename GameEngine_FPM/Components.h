@@ -104,9 +104,32 @@ public:
 		aKey = false;
 		dKey = false;
 	}
-}
+};
+
+struct BoxCollider
+{
+	ECS_DECLARE_TYPE;
+public:
+	// Round up collision with tiles to avoid getting stuck
+	int leftEdge, rightEdge, topEdge, bottomEdge;
+
+	BoxCollider()
+	{
+		// Set all structure's members to 0
+		std::memset(this, '\0', sizeof(BoxCollider));
+	}
+
+	void Update(int xSide, int ySide, int width, int height)
+	{
+		leftEdge = xSide;
+		rightEdge = xSide + width;
+		topEdge = ySide;
+		bottomEdge = ySide + height;
+	}
+};
 
 ECS_DEFINE_TYPE(Transform);
 ECS_DEFINE_TYPE(Sprite2D);
 ECS_DEFINE_TYPE(Animator);
 ECS_DEFINE_TYPE(InputController);
+ECS_DEFINE_TYPE(BoxCollider);
