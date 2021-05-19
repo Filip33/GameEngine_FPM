@@ -7,12 +7,18 @@
 #include "Systems/AnimationSystem.h"
 #include "Systems/InputSystem.h"
 #include "Systems/MovementSystem.h"
+#include "Systems/PhysicsSystem.h"
+#include "Interface/Button.h"
+#include "Interface/ButtonMap.h"
+#include "Interface/States.h"
+#include "Interface/PauseMenu.h"
 
 class Engine
 {
 public:
 	sf::RenderWindow* window;
 	ECS::World* world;
+	class PauseMenu pauseMenu;
 
 	static Engine& GetInstance();
 
@@ -32,5 +38,6 @@ private:
 	~Engine();
 
 	void Update();
+	void ShowPauseMenu();
 };
 

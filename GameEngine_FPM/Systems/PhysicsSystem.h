@@ -2,6 +2,7 @@
 #include "../Engine.h"
 class PhysicsSystem : public ECS::EntitySystem
 {
+public:
 	PhysicsSystem();
 
 	bool IsColliding(

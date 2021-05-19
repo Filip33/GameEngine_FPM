@@ -42,4 +42,8 @@ void Engine::Update()
 	world->tick(10.0f);
 }
 
+void Engine::ShowPauseMenu()
+{
+}
+
 Engine::~Engine() = default;

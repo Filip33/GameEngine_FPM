@@ -164,6 +164,7 @@ void PhysicsSystem::PushEntity(ECS::Entity * touchingEntity, ECS::Entity * touch
 
 void PhysicsSystem::tick(ECS::World * world, float deltaTime)
 {
+	// This gets the collision box for each entity
 	world->each<struct BoxCollider, struct Sprite2D, struct Transform>(
 		[&](ECS::Entity* entity,
 			ECS::ComponentHandle<struct BoxCollider> collider,

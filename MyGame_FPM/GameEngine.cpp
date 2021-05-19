@@ -21,6 +21,7 @@ int main(int argc, char* args[])
 	GameEngine.AddSystem(new AnimationSystem());
 	GameEngine.AddSystem(new InputSystem(&window));
 	GameEngine.AddSystem(new MovementSystem());
+	GameEngine.AddSystem(new PhysicsSystem());
 
 	// Create and assign entities to the world
 	background = GameEngine.world->create();
@@ -34,11 +35,13 @@ int main(int argc, char* args[])
 	stickFigure->assign<Transform>(300, 300, 0.2f, 0.2f);
 	stickFigure->assign<Sprite2D>("../Debug/Pics/hero.png");
 	stickFigure->assign<Animator>(32, 32, 200.0f, 4, 1);
+	stickFigure->assign<BoxCollider>();
 
 	tux->assign<Transform>(200, 200, 0.3f, 0.3f);
 	tux->assign<Sprite2D>("../Debug/Pics/tux_from_linux.png");
 	tux->assign<Animator>(56, 72, 2000.0f, 3, 9);
 	tux->assign<InputController>();
+	tux->assign<BoxCollider>();
 	tux->get<Animator>()->currentRow = 0; // Idle row
 	
 
