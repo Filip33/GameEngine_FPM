@@ -7,7 +7,10 @@ InputSystem::InputSystem(sf::RenderWindow* window)
 
 void InputSystem::tick(ECS::World* world, float deltaTime)
 {
-	GetKeyEvents(world);
+	if (States::GetPausedState() == false)
+	{
+		GetKeyEvents(world);
+	}
 }
 
 void InputSystem::GetKeyEvents(ECS::World* world)

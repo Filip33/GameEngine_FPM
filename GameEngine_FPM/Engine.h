@@ -12,6 +12,7 @@
 #include "Interface/ButtonMap.h"
 #include "Interface/States.h"
 #include "Interface/PauseMenu.h"
+#include "Interface/MainCamera.h"
 
 class Engine
 {
@@ -19,6 +20,7 @@ public:
 	sf::RenderWindow* window;
 	ECS::World* world;
 	class PauseMenu pauseMenu;
+	class MainCamera mainCam;
 
 	static Engine& GetInstance();
 

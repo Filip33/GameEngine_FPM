@@ -26,12 +26,12 @@ void PauseMenu::Update(sf::Event event, float deltaTime, sf::RenderWindow* windo
 	if (ButtonMap::GetMap()["RESUME"]->bClicked == true)
 	{
 		States::SetPauseState(States::GetPausedState() == false);
-		ButtonMap::GetMap()["RESUME"]->bClicked == false;
+		ButtonMap::GetMap()["RESUME"]->bClicked = false;
 	}
 	if (ButtonMap::GetMap()["QUIT"]->bClicked == true)
 	{
 		Quit(window);
-		ButtonMap::GetMap()["QUIT"]->bClicked == false;
+		ButtonMap::GetMap()["QUIT"]->bClicked = false;
 	}
 }
 

@@ -140,75 +140,118 @@ void PhysicsSystem::PushEntity(ECS::Entity * touchingEntity, ECS::Entity * touch
 	float _newTouchedX = touchedEntity->get<struct Transform>()->xPos;
 	float _newTouchedY = touchedEntity->get<struct Transform>()->yPos;
 
-	// Travelling right, pushing from the left side
-	if (_newTouchingXSpeed > 0 && _newTouchingX < _newTouchedX)
+
+	if (std::find(
+		touchedEntity->get<Tag>()->tagNames.begin(),
+		touchedEntity->get<Tag>()->tagNames.end(),
+		"Object") != 
+		touchedEntity->get<Tag>()->tagNames.end())
 	{
-		touchedEntity->get<struct Transform>()->xPos++;
-	}
-	// Travelling left, pushing from the right side
-	else if (_newTouchingXSpeed < 0 && _newTouchingX > _newTouchedX)
-	{
-		touchedEntity->get<struct Transform>()->xPos--;
-	}
-	// Travelling down, pushing from the top side
-	else if (_newTouchingYSpeed > 0 && _newTouchingY < _newTouchedY)
-	{
-		touchedEntity->get<struct Transform>()->yPos++;
-	}
-	// Travelling up, pushing from the bottom side
-	else if (_newTouchingYSpeed < 0 && _newTouchingY > _newTouchedY)
-	{
-		touchedEntity->get<struct Transform>()->yPos--;
+		if (std::find(
+			touchingEntity->get<Tag>()->tagNames.begin(),
+			touchingEntity->get<Tag>()->tagNames.end(),
+			"Player") !=
+			touchingEntity->get<Tag>()->tagNames.end())
+		{
+			// Travelling right, pushing from the left side
+			if (_newTouchingXSpeed > 0 && _newTouchingX < _newTouchedX)
+			{
+				touchedEntity->get<struct Transform>()->xPos++;
+			}
+			// Travelling left, pushing from the right side
+			else if (_newTouchingXSpeed < 0 && _newTouchingX > _newTouchedX)
+			{
+				touchedEntity->get<struct Transform>()->xPos--;
+			}
+			// Travelling down, pushing from the top side
+			else if (_newTouchingYSpeed > 0 && _newTouchingY < _newTouchedY)
+			{
+				touchedEntity->get<struct Transform>()->yPos++;
+			}
+			// Travelling up, pushing from the bottom side
+			else if (_newTouchingYSpeed < 0 && _newTouchingY > _newTouchedY)
+			{
+				touchedEntity->get<struct Transform>()->yPos--;
+			}
+		}
 	}
 }
 
 void PhysicsSystem::tick(ECS::World * world, float deltaTime)
 {
-	// This gets the collision box for each entity
-	world->each<struct BoxCollider, struct Sprite2D, struct Transform>(
-		[&](ECS::Entity* entity,
-			ECS::ComponentHandle<struct BoxCollider> collider,
-			ECS::ComponentHandle<struct Sprite2D> sprite,
-			ECS::ComponentHandle<struct Transform> transform)->void
-		{
-			collider->Update(transform->xPos, transform->yPos,
-				sprite->picture.getTextureRect().width,
-				sprite->picture.getTextureRect().height);
-		});
+	if (States::GetPausedState() == false)
+	{
+		// This gets the collision box for each entity
+		world->each<struct BoxCollider, struct Sprite2D, struct Transform>(
+			[&](ECS::Entity* entity,
+				ECS::ComponentHandle<struct BoxCollider> collider,
+				ECS::ComponentHandle<struct Sprite2D> sprite,
+				ECS::ComponentHandle<struct Transform> transform)->void
+			{
+				collider->Update(transform->xPos, transform->yPos,
+					sprite->picture.getTextureRect().width,
+					sprite->picture.getTextureRect().height);
+			});
 
-	// Collider for box and transform entities
-	world->each<struct BoxCollider, struct Transform>(
-		[&](ECS::Entity* touchingEntity,
-			ECS::ComponentHandle<struct BoxCollider> touchingBox,
-			ECS::ComponentHandle<struct Transform> transform)->void
-		{
-			world->each<struct BoxCollider>(
-				[&](ECS::Entity* touchedEntity,
-					ECS::ComponentHandle<struct BoxCollider> touchedBox)->void
-				{
-					// Statement to avoid comparing the same entity to itself 
-					if (touchingEntity->getEntityId() == touchedEntity->getEntityId())
+		// Collider for box and transform entities
+		world->each<struct BoxCollider, struct Transform>(
+			[&](ECS::Entity* touchingEntity,
+				ECS::ComponentHandle<struct BoxCollider> touchingBox,
+				ECS::ComponentHandle<struct Transform> transform)->void
+			{
+				world->each<struct BoxCollider>(
+					[&](ECS::Entity* touchedEntity,
+						ECS::ComponentHandle<struct BoxCollider> touchedBox)->void
 					{
-						return;
-					}
+						// Statement to avoid comparing the same entity to itself 
+						if (touchingEntity->getEntityId() == touchedEntity->getEntityId())
+						{
+							return;
+						}
 
-					// Initial collision check
-					if (IsColliding(touchingBox, touchedBox) == false)
+						// Initial collision check
+						if (IsColliding(touchingBox, touchedBox) == false)
+						{
+							return;
+						}
+
+						// Final collision check
+						PushEntity(touchingEntity, touchedEntity);
+					});
+			});
+
+		world->each<struct BoxCollider, struct Transform, struct Tag>(
+			[&](ECS::Entity* touchingEntity,
+				ECS::ComponentHandle<struct BoxCollider> touchingBox,
+				ECS::ComponentHandle<struct Transform> transform1,
+				ECS::ComponentHandle<struct Tag> tag1)->void
+			{
+				world->each<struct BoxCollider, struct Transform, struct Tag>(
+					[&](ECS::Entity* touchedEntity,
+						ECS::ComponentHandle<struct BoxCollider> touchedBox,
+						ECS::ComponentHandle<struct Transform> transform2,
+						ECS::ComponentHandle<struct Tag> tag2)->void
 					{
-						return;
-					}
+						// Statement to avoid comparing the same entity to itself
+						if (touchingEntity->getEntityId() == touchedEntity->getEntityId())
+						{
+							return;
+						}
 
-					// Final collision check
-					PushEntity(touchingEntity, touchedEntity);
-				});
-		});
+						if (IsColliding(touchingBox, touchedBox) == true)
+						{
+							PushEntity(touchingEntity, touchedEntity);
+						}
+					});
+			});
 
-	world->each<struct Transform>(
-		[&](ECS::Entity* entity,
-			ECS::ComponentHandle<struct Transform> transform)->void
-		{
-			transform->Move();
-		});
+		world->each<struct Transform>(
+			[&](ECS::Entity* entity,
+				ECS::ComponentHandle<struct Transform> transform)->void
+			{
+				transform->Move();
+			});
+	}
 }
 
 PhysicsSystem::~PhysicsSystem() = default;

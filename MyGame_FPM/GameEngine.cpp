@@ -15,6 +15,7 @@ int main(int argc, char* args[])
 	ECS::Entity* background;
 	ECS::Entity* stickFigure;
 	ECS::Entity* tux;
+	ECS::Entity* pistol;
 
 	// Add systems to the engine here
 	GameEngine.AddSystem(new RenderingSystem());
@@ -27,23 +28,38 @@ int main(int argc, char* args[])
 	background = GameEngine.world->create();
 	stickFigure = GameEngine.world->create();
 	tux = GameEngine.world->create();
+	pistol = GameEngine.world->create();
 
 	// Assign components to entities after creation
 	background->assign<Transform>(0, 0);
 	background->assign<Sprite2D>("../Debug/Pics/bg.jpg");
+	background->assign<Tag>();
+	background->get<Tag>()->AddTag("Background");
 
 	stickFigure->assign<Transform>(300, 300, 0.2f, 0.2f);
 	stickFigure->assign<Sprite2D>("../Debug/Pics/hero.png");
 	stickFigure->assign<Animator>(32, 32, 200.0f, 4, 1);
 	stickFigure->assign<BoxCollider>();
+	stickFigure->assign<Tag>();
+	stickFigure->get<Tag>()->AddTag("NPC");
 
 	tux->assign<Transform>(200, 200, 0.3f, 0.3f);
 	tux->assign<Sprite2D>("../Debug/Pics/tux_from_linux.png");
 	tux->assign<Animator>(56, 72, 2000.0f, 3, 9);
 	tux->assign<InputController>();
 	tux->assign<BoxCollider>();
+	tux->assign<Camera>(sf::Vector2f(
+		window.getSize().x / 2,
+		window.getSize().y / 2));
+	tux->assign<Tag>();
+	tux->get<Tag>()->AddTag("Player");
 	tux->get<Animator>()->currentRow = 0; // Idle row
 	
+	pistol->assign<Transform>(200, 300);
+	pistol->assign<Sprite2D>("../Debug/Pics/pistol.png");
+	pistol->assign<BoxCollider>();
+	pistol->assign<Tag>();
+	pistol->get<Tag>()->AddTag("Object");
 
 	std::cout << background->getEntityId() << " is the entity ID." << std::endl;
 	std::cout << stickFigure->getEntityId() << " is the entity ID." << std::endl;

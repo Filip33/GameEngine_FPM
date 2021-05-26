@@ -128,8 +128,42 @@ public:
 	}
 };
 
+struct Camera
+{
+	ECS_DECLARE_TYPE;
+public:
+	sf::View cameraView;
+
+	Camera(sf::Vector2f pivot)
+	{
+		cameraView.setCenter(pivot);
+	}
+};
+
+struct Tag
+{
+	ECS_DECLARE_TYPE;
+public:
+	std::vector<std::string> tagNames;
+
+	Tag() = default;
+
+	void AddTag(std::string tag)
+	{
+		tagNames.push_back(tag);
+	}
+};
+
+struct TileMap
+{
+	ECS_DECLARE_TYPE;
+};
+
 ECS_DEFINE_TYPE(Transform);
 ECS_DEFINE_TYPE(Sprite2D);
 ECS_DEFINE_TYPE(Animator);
 ECS_DEFINE_TYPE(InputController);
 ECS_DEFINE_TYPE(BoxCollider);
+ECS_DEFINE_TYPE(Camera);
+ECS_DEFINE_TYPE(Tag);
+ECS_DEFINE_TYPE(TileMap);
