@@ -1,32 +1,37 @@
 #include "Tile.h"
 
-Tile::Tile()
-{
-}
+Tile::Tile() = default;
 
 Tile::Tile(float xPos, float yPos, float gridSizeF, bool bColliding)
 {
+    this->shape.setSize(sf::Vector2f(gridSizeF, gridSizeF));
+    this->shape.setFillColor(sf::Color::Blue);
+    this->shape.setPosition(xPos * gridSizeF, yPos * gridSizeF);
+    this->bColliding = bColliding;
 }
 
 void Tile::Render(sf::RenderTarget& target)
 {
+    target.draw(this->shape);
 }
 
 const bool& Tile::GetCollision() const
 {
-    // TODO: insert return statement here
+    return this->bColliding;
 }
 
 const sf::Vector2f& Tile::GetPosition() const
 {
-    // TODO: insert return statement here
+    return this->shape.getPosition();
 }
 
 std::string Tile::ToString()
 {
-    return std::string();
+    std::stringstream _stringForm;
+
+    _stringForm << this->bColliding << " ";
+
+    return _stringForm.str();
 }
 
-Tile::~Tile()
-{
-}
+Tile::~Tile() = default;

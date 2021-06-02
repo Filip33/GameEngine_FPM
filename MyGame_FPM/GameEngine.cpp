@@ -23,6 +23,7 @@ int main(int argc, char* args[])
 	GameEngine.AddSystem(new InputSystem(&window));
 	GameEngine.AddSystem(new MovementSystem());
 	GameEngine.AddSystem(new PhysicsSystem());
+	GameEngine.AddSystem(new TileMapSystem());
 
 	// Create and assign entities to the world
 	background = GameEngine.world->create();
@@ -34,6 +35,7 @@ int main(int argc, char* args[])
 	background->assign<Transform>(0, 0);
 	background->assign<Sprite2D>("../Debug/Pics/bg.jpg");
 	background->assign<Tag>();
+	// background->assign<TileMap>();
 	background->get<Tag>()->AddTag("Background");
 
 	stickFigure->assign<Transform>(300, 300, 0.2f, 0.2f);
@@ -52,6 +54,7 @@ int main(int argc, char* args[])
 		window.getSize().x / 2,
 		window.getSize().y / 2));
 	tux->assign<Tag>();
+	tux->assign<TileMap>();
 	tux->get<Tag>()->AddTag("Player");
 	tux->get<Animator>()->currentRow = 0; // Idle row
 	
