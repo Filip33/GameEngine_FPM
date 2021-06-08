@@ -57,17 +57,13 @@ void Button::CheckPressed(sf::Event event)
 	{
 		if (event.type == sf::Event::MouseButtonPressed)
 		{
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) == true)
+			bPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+
+			if (bPressed == false)
 			{
-				bPressed = true;
-			}
-			else
-			{
-				bPressed = false;
 				bClicked = false;
 			}
 		}
-
 		if (bPressed == true)
 		{
 			if (event.type == sf::Event::MouseButtonReleased)

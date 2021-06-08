@@ -18,20 +18,23 @@ void PauseMenu::Update(sf::Event event, float deltaTime, sf::RenderWindow* windo
 		}
 	}
 
-	ButtonMap::GetMap() ["RESUME"]->Update(event, deltaTime);
-	ButtonMap::GetMap()["LOAD"]->Update(event, deltaTime);
-	ButtonMap::GetMap()["SAVE"]->Update(event, deltaTime);
-	ButtonMap::GetMap()["QUIT"]->Update(event, deltaTime);
+	if (States::GetPausedState() == true)
+	{
+		ButtonMap::GetMap()["RESUME"]->Update(event, deltaTime);
+		ButtonMap::GetMap()["LOAD"]->Update(event, deltaTime);
+		ButtonMap::GetMap()["SAVE"]->Update(event, deltaTime);
+		ButtonMap::GetMap()["QUIT"]->Update(event, deltaTime);
 
-	if (ButtonMap::GetMap()["RESUME"]->bClicked == true)
-	{
-		States::SetPauseState(States::GetPausedState() == false);
-		ButtonMap::GetMap()["RESUME"]->bClicked = false;
-	}
-	if (ButtonMap::GetMap()["QUIT"]->bClicked == true)
-	{
-		Quit(window);
-		ButtonMap::GetMap()["QUIT"]->bClicked = false;
+		if (ButtonMap::GetMap()["RESUME"]->bClicked == true)
+		{
+			States::SetPauseState(States::GetPausedState() == false);
+			ButtonMap::GetMap()["RESUME"]->bClicked = false;
+		}
+		if (ButtonMap::GetMap()["QUIT"]->bClicked == true)
+		{
+			Quit(window);
+			ButtonMap::GetMap()["QUIT"]->bClicked = false;
+		}
 	}
 }
 

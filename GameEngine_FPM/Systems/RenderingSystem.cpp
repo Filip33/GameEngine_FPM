@@ -15,8 +15,7 @@ void RenderingSystem::tick(ECS::World * world, float deltaTime)
 		world->each<struct Transform, struct Sprite2D>(
 			[&](ECS::Entity* entity,
 				ECS::ComponentHandle<Transform> transform,
-				ECS::ComponentHandle<Sprite2D> sprite
-				) -> void
+				ECS::ComponentHandle<Sprite2D> sprite) -> void
 			{
 				// This is where we implement the anonymous function
 				// Check if an entity has their texture loaded first
@@ -37,6 +36,34 @@ void RenderingSystem::tick(ECS::World * world, float deltaTime)
 				sprite->picture.setPosition(transform->xPos, transform->yPos);
 
 				Engine::GetInstance().window->draw(sprite->picture);
+			});
+
+		world->each<struct TileMap>(
+			[&](ECS::Entity* entity,
+				ECS::ComponentHandle<TileMap> tileMap) -> void
+			{
+				// Loops through each tile and render onto the engines window instance
+				// Note that this is looping through a vector which stores a vector which stores the tile value
+				for (auto& x : tileMap->map)
+				{
+					for (auto& y : x)
+					{
+						for (auto& z : y)
+						{
+							if (z != nullptr)
+							{
+								sf::RenderWindow* winRef = Engine::GetInstance().window;
+								winRef->draw(z->shape);
+
+								if (z->GetCollision() == true)
+								{
+									tileMap->collisionBox.setPosition(z->GetPosition());
+									winRef->draw(tileMap->collisionBox);
+								}
+							}
+						}
+					}
+				}
 			});
 
 		// Display updates
